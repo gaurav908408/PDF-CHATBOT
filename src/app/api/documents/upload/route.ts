@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { documentService } from "@/services/document.service";
+import { ingestionService } from "@/services/ingestion.service";
 import { successResponse, errorResponse } from "@/lib/utils/api-response";
 import { API_ERROR_CODES } from "@/config/constants";
 import { logger } from "@/lib/utils/logger";
@@ -13,11 +14,18 @@ export async function POST(req: NextRequest) {
       return errorResponse(API_ERROR_CODES.BAD_REQUEST, "No file uploaded. Please attach a PDF file.", 400);
     }
 
+    // 1. Upload & Create DB Record
     const document = await documentService.uploadDocument(file);
+
+    // 2. Trigger Ingestion Pipeline (PDF Parse -> Chunking -> Embeddings -> pgvector)
+    // Run in background / async queue context
+    ingestionService.processAndIndexDocument(document.id).catch((err) => {
+      logger.error("Background ingestion pipeline failed for document", err, { documentId: document.id });
+    });
 
     return successResponse(
       { document },
-      "File uploaded successfully. Document processing queued.",
+      "File uploaded successfully. Text extraction, chunking, and embedding ingestion started.",
       201
     );
   } catch (error) {
