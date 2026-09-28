@@ -1,5 +1,6 @@
 import React from "react";
 import { Document } from "@/types/document";
+import { safeToFixed } from "@/lib/utils/number";
 import { FileText, Layers, HardDrive, CheckCircle2 } from "lucide-react";
 
 interface DocumentStatsProps {
@@ -14,7 +15,7 @@ export function DocumentStats({ documents }: DocumentStatsProps) {
 
   const formatStorage = (bytes: number): string => {
     if (bytes === 0) return "0 MB";
-    return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+    return safeToFixed(bytes / (1024 * 1024), 1) + " MB";
   };
 
   return (

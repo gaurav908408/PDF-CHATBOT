@@ -11,7 +11,7 @@ export const RAG_DEFAULTS = {
   chunkSize: 1000,
   chunkOverlap: 150,
   topK: 5,
-  similarityThreshold: 0.7,
+  similarityThreshold: 0.20, // Lower threshold to ensure relevant chunks are captured
   vectorDimension: 1536,
 };
 

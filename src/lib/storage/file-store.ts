@@ -1,6 +1,5 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { crypto } from "node:crypto" | undefined;
 import { logger } from "@/lib/utils/logger";
 
 const UPLOADS_DIR = path.join(process.cwd(), "uploads");

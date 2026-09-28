@@ -45,25 +45,27 @@ export class PdfProcessorService {
         throw new Error("Document text parsing produced 0 text chunks.");
       }
 
+      const verifiedPageCount = Math.max(parseResult.totalPages, parseResult.pages.length, 1);
+
       // 4. Update document metadata in DB
-      await updateDocumentStatus(documentId, "PROCESSING", parseResult.totalPages);
+      await updateDocumentStatus(documentId, "PROCESSING", verifiedPageCount);
 
       logger.info("PDF processing completed successfully", {
         documentId,
-        totalPages: parseResult.totalPages,
+        totalPages: verifiedPageCount,
         totalChunks: chunks.length,
       });
 
       return {
         documentId,
-        totalPages: parseResult.totalPages,
+        totalPages: verifiedPageCount,
         totalChunks: chunks.length,
         chunks,
       };
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : "Unknown error during PDF parsing";
       logger.error("PDF Processing failed", error, { documentId });
-      await updateDocumentStatus(documentId, "FAILED", 0, errorMsg);
+      await updateDocumentStatus(documentId, "FAILED", undefined, errorMsg);
       throw error;
     }
   }

@@ -46,10 +46,10 @@ export class IngestionService {
 
       logger.info("Step 3 Complete: Vectors stored in pgvector database", { documentId });
 
-      // Step 4: Update Document Status to READY
+      // Step 4: Update Document Status to READY with verified totalPages
       await updateDocumentStatus(documentId, "READY", pdfResult.totalPages);
 
-      logger.info("End-to-End Ingestion Pipeline Finished Successfully", { documentId, status: "READY" });
+      logger.info("End-to-End Ingestion Pipeline Finished Successfully", { documentId, totalPages: pdfResult.totalPages, status: "READY" });
 
       return {
         documentId,
@@ -60,7 +60,7 @@ export class IngestionService {
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : "Ingestion pipeline failure";
       logger.error("End-to-End Ingestion Pipeline Failed", error, { documentId });
-      await updateDocumentStatus(documentId, "FAILED", 0, errorMsg);
+      await updateDocumentStatus(documentId, "FAILED", undefined, errorMsg);
       throw error;
     }
   }

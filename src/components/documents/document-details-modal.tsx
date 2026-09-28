@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState } from "react";
 import { Document } from "@/types/document";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { safeToFixed } from "@/lib/utils/number";
 import { X, FileText, Layers, HardDrive, Calendar, Database, Play } from "lucide-react";
 
 interface DocumentDetailsModalProps {
@@ -73,7 +74,7 @@ export function DocumentDetailsModal({ document, onClose, onReIndex }: DocumentD
               <HardDrive className="h-3.5 w-3.5 text-emerald-400" /> Size
             </span>
             <span className="font-semibold text-slate-200 block text-sm">
-              {(document.fileSize / (1024 * 1024)).toFixed(2)} MB
+              {safeToFixed(document.fileSize / (1024 * 1024), 2)} MB
             </span>
           </div>
 

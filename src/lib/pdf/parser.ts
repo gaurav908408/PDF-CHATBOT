@@ -57,13 +57,15 @@ export async function parsePdfPages(dataBuffer: Buffer): Promise<ParsedPdfResult
     // Ensure pages are sorted by page number
     pages.sort((a, b) => a.pageNumber - b.pageNumber);
 
+    const actualPageCount = Math.max(parsed.numpages || 0, pages.length, 1);
+
     logger.info("PDF parsed successfully page-by-page", {
-      totalPages: parsed.numpages,
+      totalPages: actualPageCount,
       extractedPagesCount: pages.length,
     });
 
     return {
-      totalPages: parsed.numpages,
+      totalPages: actualPageCount,
       pages,
       info: parsed.info,
     };
