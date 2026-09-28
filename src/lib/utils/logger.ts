@@ -11,8 +11,18 @@ class Logger {
     console.log(this.formatMessage("info", message, context));
   }
 
-  warn(message: string, context?: Record<string, unknown>): void {
-    console.warn(this.formatMessage("warn", message, context));
+  warn(message: string, errorOrContext?: unknown, context?: Record<string, unknown>): void {
+    if (errorOrContext !== null && typeof errorOrContext === "object" && !Array.isArray(errorOrContext) && !(errorOrContext instanceof Error)) {
+      console.warn(this.formatMessage("warn", message, errorOrContext as Record<string, unknown>));
+    } else {
+      const errorDetails =
+        errorOrContext instanceof Error
+          ? { name: errorOrContext.name, message: errorOrContext.message, stack: errorOrContext.stack }
+          : errorOrContext !== undefined
+          ? { error: String(errorOrContext) }
+          : undefined;
+      console.warn(this.formatMessage("warn", message, { ...context, ...(errorDetails ? { error: errorDetails } : {}) }));
+    }
   }
 
   error(message: string, error?: unknown, context?: Record<string, unknown>): void {

@@ -31,14 +31,24 @@ export class MultiProviderLLMService implements ILLMProvider {
       try {
         return await this.callGeminiApi(prompt, systemPrompt);
       } catch (geminiError) {
-        logger.warn("Gemini API call failed, trying OpenAI or fallback", geminiError);
+        logger.warn(
+          "Gemini API call failed, trying OpenAI or fallback",
+          geminiError instanceof Error
+            ? { name: geminiError.name, message: geminiError.message, stack: geminiError.stack }
+            : { error: String(geminiError) }
+        );
       }
     }
 
     try {
       return await this.callOpenAiApi(prompt, systemPrompt);
     } catch (openAiError) {
-      logger.warn("OpenAI API call failed, using intelligent fallback synthesizer", openAiError);
+      logger.warn(
+        "OpenAI API call failed, using intelligent fallback synthesizer",
+        openAiError instanceof Error
+          ? { name: openAiError.name, message: openAiError.message, stack: openAiError.stack }
+          : { error: String(openAiError) }
+      );
       return this.synthesizeMockAnswer(prompt);
     }
   }

@@ -34,7 +34,10 @@ export class RagService {
         similarityThreshold: options.similarityThreshold ?? 0.05,
       });
     } catch (err) {
-      logger.warn("Initial vector similarity search yielded error", err);
+      logger.warn(
+        "Initial vector similarity search yielded error",
+        err instanceof Error ? { name: err.name, message: err.message } : { error: String(err) }
+      );
     }
 
     // Step 2: Fallback context retrieval if vector search returned 0 results
