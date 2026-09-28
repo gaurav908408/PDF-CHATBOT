@@ -1,15 +1,17 @@
 import { NextResponse } from "next/server";
-import { ApiErrorResponse, ApiSuccessResponse } from "@/types/api";
+import { ApiErrorResponse, ApiSuccessResponse, ApiErrorDetail } from "@/types/api";
 
 export function successResponse<T>(data: T, message?: string, status = 200): NextResponse<ApiSuccessResponse<T>> {
-  return NextResponse.json(
-    {
-      success: true,
-      data,
-      ...(message && { message }),
-    },
-    { status }
-  );
+  const payload: ApiSuccessResponse<T> = {
+    success: true,
+    data,
+  };
+
+  if (message) {
+    payload.message = message;
+  }
+
+  return NextResponse.json(payload, { status });
 }
 
 export function errorResponse(
@@ -18,14 +20,19 @@ export function errorResponse(
   status = 400,
   details?: unknown
 ): NextResponse<ApiErrorResponse> {
+  const errorPayload: ApiErrorDetail = {
+    code,
+    message,
+  };
+
+  if (details !== undefined && details !== null) {
+    errorPayload.details = details;
+  }
+
   return NextResponse.json(
     {
       success: false,
-      error: {
-        code,
-        message,
-        ...(details && { details }),
-      },
+      error: errorPayload,
     },
     { status }
   );
