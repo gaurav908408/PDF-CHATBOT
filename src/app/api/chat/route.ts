@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { chatService } from "@/services/chat.service";
+import { getCurrentUser } from "@/lib/auth/session";
 import { successResponse, errorResponse } from "@/lib/utils/api-response";
 import { API_ERROR_CODES } from "@/config/constants";
 import { logger } from "@/lib/utils/logger";
@@ -13,6 +14,7 @@ const chatQuerySchema = z.object({
 
 export async function POST(req: NextRequest) {
   try {
+    const user = await getCurrentUser(req);
     const body = await req.json();
     const validation = chatQuerySchema.safeParse(body);
 
@@ -30,7 +32,8 @@ export async function POST(req: NextRequest) {
     const result = await chatService.handleUserQuestion(
       question,
       conversationId || undefined,
-      documentId || undefined
+      documentId || undefined,
+      user.userId
     );
 
     return successResponse(

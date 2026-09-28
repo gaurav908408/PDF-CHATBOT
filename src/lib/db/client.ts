@@ -7,6 +7,8 @@ declare global {
   var postgresPool: Pool | undefined;
 }
 
+const isCloudDatabase = env.DATABASE_URL.includes("sslmode=require") || env.DATABASE_URL.includes("neon.tech");
+
 // Global connection pool singleton for Next.js serverless/dev hot-reload optimization
 export const pool =
   global.postgresPool ||
@@ -14,7 +16,12 @@ export const pool =
     connectionString: env.DATABASE_URL,
     max: 20,
     idleTimeoutMillis: 30000,
-    connectionTimeoutMillis: 5000,
+    connectionTimeoutMillis: 10000,
+    ...(isCloudDatabase && {
+      ssl: {
+        rejectUnauthorized: false,
+      },
+    }),
   });
 
 if (process.env.NODE_ENV !== "production") {
