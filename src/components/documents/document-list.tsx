@@ -80,7 +80,7 @@ export function DocumentList({ documents, onRefresh, onDeleteDocument }: Documen
             placeholder="Search documents by title..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-9 h-9 text-xs"
+            className="pl-9 h-9 text-xs border-slate-300 bg-white text-slate-900 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
           />
         </div>
 
@@ -88,7 +88,7 @@ export function DocumentList({ documents, onRefresh, onDeleteDocument }: Documen
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="h-9 rounded-lg border border-slate-700 bg-slate-900 px-3 text-xs text-slate-200 focus:outline-none"
+            className="h-9 rounded-lg border border-slate-300 bg-white px-3 text-xs text-slate-800 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 focus:outline-none"
           >
             <option value="ALL">All Statuses</option>
             <option value="READY">Ready</option>
@@ -97,7 +97,7 @@ export function DocumentList({ documents, onRefresh, onDeleteDocument }: Documen
           </select>
 
           {onRefresh && (
-            <Button variant="ghost" size="sm" onClick={onRefresh} className="h-9 text-xs gap-1.5 text-slate-400 shrink-0">
+            <Button variant="ghost" size="sm" onClick={onRefresh} className="h-9 text-xs gap-1.5 text-slate-600 dark:text-slate-400 shrink-0">
               <RefreshCw className="h-3.5 w-3.5" />
             </Button>
           )}
@@ -105,10 +105,10 @@ export function DocumentList({ documents, onRefresh, onDeleteDocument }: Documen
       </div>
 
       {filteredDocuments.length === 0 ? (
-        <div className="flex flex-col items-center justify-center p-12 text-center border-2 border-dashed border-slate-800 rounded-xl bg-slate-900/30">
-          <FileText className="h-12 w-12 text-slate-600 mb-3" />
-          <h3 className="text-base font-semibold text-slate-200">No Documents Found</h3>
-          <p className="text-xs text-slate-400 mt-1 max-w-sm">
+        <div className="flex flex-col items-center justify-center p-12 text-center border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50 dark:bg-slate-900/30">
+          <FileText className="h-12 w-12 text-slate-400 dark:text-slate-600 mb-3" />
+          <h3 className="text-base font-semibold text-slate-900 dark:text-slate-200">No Documents Found</h3>
+          <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 max-w-sm">
             {searchQuery || statusFilter !== "ALL"
               ? "No documents match your filter criteria."
               : "Upload a PDF document to start parsing text and building pgvector indexes."}
@@ -120,27 +120,27 @@ export function DocumentList({ documents, onRefresh, onDeleteDocument }: Documen
             <div
               key={doc.id}
               onClick={() => setSelectedDoc(doc)}
-              className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-slate-800 bg-slate-900/60 hover:bg-slate-900 hover:border-slate-700 transition-all cursor-pointer gap-4 group"
+              className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900/60 dark:hover:bg-slate-900 dark:hover:border-slate-700 transition-all cursor-pointer gap-4 group shadow-sm"
             >
               <div className="flex items-start gap-3 min-w-0">
-                <div className="p-2.5 rounded-lg bg-indigo-600/15 text-brand-400 border border-indigo-800/40 shrink-0 group-hover:bg-brand-600 group-hover:text-white transition-colors">
+                <div className="p-2.5 rounded-lg bg-indigo-50 text-indigo-600 border border-indigo-200 dark:bg-indigo-600/15 dark:text-brand-400 dark:border-indigo-800/40 shrink-0 group-hover:bg-brand-600 group-hover:text-white transition-colors">
                   <FileText className="h-5 w-5" />
                 </div>
                 <div className="min-w-0 space-y-1">
-                  <h4 className="text-sm font-semibold text-slate-100 truncate group-hover:text-brand-300 transition-colors">
+                  <h4 className="text-sm font-semibold text-slate-900 dark:text-slate-100 truncate group-hover:text-brand-600 dark:group-hover:text-brand-300 transition-colors">
                     {doc.fileName}
                   </h4>
-                  <div className="flex flex-wrap items-center gap-3 text-xs text-slate-400">
+                  <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
                     <span className="flex items-center gap-1">
-                      <HardDrive className="h-3 w-3 text-slate-500" />
+                      <HardDrive className="h-3 w-3 text-slate-400 dark:text-slate-500" />
                       {formatFileSize(doc.fileSize)}
                     </span>
                     <span className="flex items-center gap-1">
-                      <Layers className="h-3 w-3 text-slate-500" />
+                      <Layers className="h-3 w-3 text-slate-400 dark:text-slate-500" />
                       {doc.totalPages || 0} Pages
                     </span>
                     <span className="flex items-center gap-1">
-                      <Calendar className="h-3 w-3 text-slate-500" />
+                      <Calendar className="h-3 w-3 text-slate-400 dark:text-slate-500" />
                       {formatDate(doc.createdAt)}
                     </span>
                   </div>
@@ -149,7 +149,7 @@ export function DocumentList({ documents, onRefresh, onDeleteDocument }: Documen
 
               <div className="flex items-center gap-3 self-end sm:self-center">
                 <Badge status={doc.status} />
-                <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-slate-400 hover:text-slate-200">
+                <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200">
                   <Eye className="h-4 w-4" />
                 </Button>
                 <Button
@@ -157,7 +157,7 @@ export function DocumentList({ documents, onRefresh, onDeleteDocument }: Documen
                   size="sm"
                   isLoading={deletingId === doc.id}
                   onClick={(e) => handleDelete(e, doc.id)}
-                  className="h-8 w-8 p-0 text-slate-400 hover:text-rose-400 hover:bg-rose-950/30"
+                  className="h-8 w-8 p-0 text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30"
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>

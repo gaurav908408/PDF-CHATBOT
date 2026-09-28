@@ -97,7 +97,7 @@ export function FileDropzone({ onUploadSuccess }: FileDropzoneProps) {
         className={`relative flex flex-col items-center justify-center p-8 rounded-xl border-2 border-dashed transition-all duration-200 cursor-pointer ${
           isDragging
             ? "border-brand-500 bg-brand-500/10 shadow-lg shadow-brand-500/10"
-            : "border-slate-800 bg-slate-900/40 hover:border-slate-700 hover:bg-slate-900/80"
+            : "border-slate-300 bg-slate-50 hover:border-slate-400 hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-900/40 dark:hover:border-slate-700 dark:hover:bg-slate-900/80"
         } ${isUploading ? "pointer-events-none opacity-60" : ""}`}
       >
         <input
@@ -112,34 +112,34 @@ export function FileDropzone({ onUploadSuccess }: FileDropzoneProps) {
           }}
         />
 
-        <div className="p-4 rounded-full bg-slate-800/80 text-brand-400 mb-4 border border-slate-700">
+        <div className="p-4 rounded-full bg-indigo-50 text-brand-600 border border-indigo-200 dark:bg-slate-800/80 dark:text-brand-400 dark:border-slate-700 mb-4">
           {isUploading ? <Loader2 className="h-8 w-8 animate-spin" /> : <UploadCloud className="h-8 w-8" />}
         </div>
 
         <div className="text-center space-y-1">
-          <p className="text-sm font-semibold text-slate-100">
+          <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
             {isUploading ? "Uploading PDF..." : "Click or drag & drop PDF here"}
           </p>
-          <p className="text-xs text-slate-400">PDF files up to {APP_CONFIG.maxFileSizeMB}MB max</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400">PDF files up to {APP_CONFIG.maxFileSizeMB}MB max</p>
         </div>
 
         {!isUploading && (
-          <Button variant="outline" size="sm" className="mt-4 gap-2">
+          <Button variant="outline" size="sm" className="mt-4 gap-2 border-slate-300 text-slate-700 dark:border-slate-700 dark:text-slate-300">
             <FileText className="h-4 w-4" /> Browse File
           </Button>
         )}
       </div>
 
       {errorMessage && (
-        <div className="flex items-center gap-2 p-3 text-xs font-medium rounded-lg bg-rose-950/60 border border-rose-800/60 text-rose-300">
-          <AlertCircle className="h-4 w-4 shrink-0 text-rose-400" />
+        <div className="flex items-center gap-2 p-3 text-xs font-medium rounded-lg bg-rose-100 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800/60 text-rose-800 dark:text-rose-300">
+          <AlertCircle className="h-4 w-4 shrink-0 text-rose-600 dark:text-rose-400" />
           <span>{errorMessage}</span>
         </div>
       )}
 
       {successMessage && (
-        <div className="flex items-center gap-2 p-3 text-xs font-medium rounded-lg bg-emerald-950/60 border border-emerald-800/60 text-emerald-300">
-          <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-400" />
+        <div className="flex items-center gap-2 p-3 text-xs font-medium rounded-lg bg-emerald-100 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800/60 text-emerald-800 dark:text-emerald-300">
+          <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
           <span>{successMessage}</span>
         </div>
       )}

@@ -28,11 +28,11 @@ export function Badge({ className, variant = "default", status, children, ...pro
   }
 
   const variants = {
-    default: "bg-slate-800 text-slate-300 border-slate-700",
-    success: "bg-emerald-950/80 text-emerald-400 border-emerald-800/60",
-    warning: "bg-amber-950/80 text-amber-400 border-amber-800/60",
-    danger: "bg-rose-950/80 text-rose-400 border-rose-800/60",
-    info: "bg-indigo-950/80 text-indigo-400 border-indigo-800/60",
+    default: "bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700",
+    success: "bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-950/80 dark:text-emerald-400 dark:border-emerald-800/60",
+    warning: "bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-950/80 dark:text-amber-400 dark:border-amber-800/60",
+    danger: "bg-rose-100 text-rose-800 border-rose-200 dark:bg-rose-950/80 dark:text-rose-400 dark:border-rose-800/60",
+    info: "bg-indigo-100 text-indigo-800 border-indigo-200 dark:bg-indigo-950/80 dark:text-indigo-400 dark:border-indigo-800/60",
   };
 
   return (

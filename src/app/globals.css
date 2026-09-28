@@ -3,29 +3,43 @@
 @tailwind utilities;
 
 :root {
-  --background: #030712;
+  --background: #f1f5f9;
+  --foreground: #0f172a;
+}
+
+html.dark {
+  --background: #090d16;
   --foreground: #f9fafb;
 }
 
 body {
   color: var(--foreground);
-  background: var(--background);
+  background-color: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-/* Custom scrollbars for chat UI */
+/* Custom scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0f172a;
+  background: #090d16;
+}
+
+html.light ::-webkit-scrollbar-track {
+  background: #e2e8f0;
 }
 
 ::-webkit-scrollbar-thumb {
   background: #1e293b;
   border-radius: 9999px;
+}
+
+html.light ::-webkit-scrollbar-thumb {
+  background: #94a3b8;
 }
 
 ::-webkit-scrollbar-thumb:hover {

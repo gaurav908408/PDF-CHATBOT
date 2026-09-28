@@ -16,11 +16,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className="flex h-screen overflow-hidden bg-slate-950 text-slate-100 antialiased">
+      <body className="flex h-screen overflow-hidden bg-slate-100 text-slate-900 dark:bg-slate-950 dark:text-slate-100 antialiased transition-colors duration-200">
         <Sidebar />
         <div className="flex flex-1 flex-col overflow-y-auto">
           <Header />
-          <main className="flex-1 bg-slate-950">{children}</main>
+          <main className="flex-1 bg-slate-100 dark:bg-slate-950 transition-colors duration-200">{children}</main>
         </div>
       </body>
     </html>
