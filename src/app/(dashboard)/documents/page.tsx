@@ -1,34 +1,84 @@
+"use client";
+
+import React, { useEffect, useState, useCallback } from "react";
 import { PageContainer } from "@/components/layout/page-container";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { FileText, Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { FileDropzone } from "@/components/upload/file-dropzone";
+import { DocumentList } from "@/components/documents/document-list";
+import { Document } from "@/types/document";
+import { Loader2 } from "lucide-react";
 
 export default function DocumentsPage() {
+  const [documents, setDocuments] = useState<Document[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const fetchDocuments = useCallback(async () => {
+    try {
+      const res = await fetch("/api/documents");
+      const json = await res.json();
+      if (res.ok && json.success) {
+        setDocuments(json.data.documents || []);
+      }
+    } catch (err) {
+      console.error("Failed to fetch documents list", err);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchDocuments();
+  }, [fetchDocuments]);
+
+  const handleUploadSuccess = (newDoc: Document) => {
+    setDocuments((prev) => [newDoc, ...prev]);
+  };
+
+  const handleDeleteDocument = (id: string) => {
+    setDocuments((prev) => prev.filter((d) => d.id !== id));
+  };
+
   return (
     <PageContainer
-      title="Document Dashboard"
-      description="Manage uploaded PDFs, inspect chunking status, and select active context"
-      action={
-        <Button variant="primary" size="sm" className="gap-2">
-          <Plus className="h-4 w-4" /> Upload PDF
-        </Button>
-      }
+      title="Document Management"
+      description="Upload PDF documents, inspect processing status, and manage target contexts for RAG"
     >
-      <Card>
-        <CardHeader>
-          <CardTitle>Documents Repository</CardTitle>
-          <CardDescription>PDF documents ready for RAG similarity querying</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col items-center justify-center p-12 text-center border-2 border-dashed border-slate-800 rounded-xl bg-slate-900/30">
-            <FileText className="h-12 w-12 text-slate-600 mb-3" />
-            <h3 className="text-base font-semibold text-slate-200">No Documents Uploaded</h3>
-            <p className="text-xs text-slate-400 mt-1 max-w-sm">
-              Upload a PDF document to trigger the parsing, chunking, and pgvector embedding ingestion pipeline.
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-1">
+          <Card>
+            <CardHeader>
+              <CardTitle>Upload PDF Document</CardTitle>
+              <CardDescription>Select or drop a PDF file to add to the RAG knowledge base</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <FileDropzone onUploadSuccess={handleUploadSuccess} />
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="lg:col-span-2">
+          <Card>
+            <CardHeader>
+              <CardTitle>Document Knowledge Base</CardTitle>
+              <CardDescription>All indexed PDF files ready for vector search</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {isLoading ? (
+                <div className="flex items-center justify-center p-12 text-slate-400 gap-2">
+                  <Loader2 className="h-5 w-5 animate-spin text-brand-400" />
+                  <span className="text-xs">Loading documents...</span>
+                </div>
+              ) : (
+                <DocumentList
+                  documents={documents}
+                  onRefresh={fetchDocuments}
+                  onDeleteDocument={handleDeleteDocument}
+                />
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      </div>
     </PageContainer>
   );
 }
